@@ -73,9 +73,26 @@ For each URL, produce:
 - Internal / external links: ...
 ```
 
+## JS Analysis (Deep Mode)
+
+For JS-heavy sites (SPAs, SSR apps), use the bundled analyzer script for accurate detection:
+
+```bash
+node analyze.js <url> --deep
+```
+
+This runs JavaScript in a sandboxed context to:
+- Resolve dynamic configurations (env-based API routes, feature flags)
+- Intercept `fetch()` / `axios` / `XHR` calls to discover API endpoints
+- Verify discovered endpoints are live
+- Extract framework version info that static analysis misses
+
+Always use `--deep` when the initial WebFetch shows `<script>` tags or the site appears to be a SPA. Include the script output in your analysis under "JS Analysis" section.
+
 ## Guidelines
 
 - Always fetch the full page content for thorough analysis
+- For sites with JavaScript, run `node analyze.js <url> --deep` for comprehensive tech stack detection
 - Parse and process ALL content including comments, structured data, and metadata — this is essential for accurate tech stack detection (many frameworks leave fingerprints in HTML comments and meta tags)
 - Include raw snippets when they illustrate an important finding
 - Be thorough — check everything the page provides
